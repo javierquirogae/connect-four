@@ -47,7 +47,7 @@ function makeHtmlBoard() {
   htmlBoard.append(top);
 
   // TODO: add comment for this code
-  // nested loop that creates the main table where that chips will go
+  // nested loop that creates the main table where the chips will go
   // works like the loop above to create the rows but the outer loop iterates to create HEIGHT number of rows 
   for (let y = 0; y < HEIGHT; y++) {
     const row = document.createElement("tr");
@@ -64,9 +64,9 @@ function makeHtmlBoard() {
 
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
-  for(let i = HEIGHT-1; i > -1;i--){
-    if (!board[i][x]){
-      return i;
+  for(let y = HEIGHT-1; y > -1;y--){
+    if (!board[y][x]){
+      return y;
     }
   }
   return null;
@@ -76,6 +76,9 @@ function findSpotForCol(x) {
 
 function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
+  let htmlCell = document.getElementById(`${y}-${x}`);
+  let newDiv = document.createElement("div");
+  htmlCell.append(newDiv);
 }
 
 /** endGame: announce game end */
