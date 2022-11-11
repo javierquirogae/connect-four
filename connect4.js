@@ -5,41 +5,53 @@
  * board fills (tie)
  */
 
-var WIDTH = 7;
-var HEIGHT = 6;
+const WIDTH = 7;
+const HEIGHT = 6;
 
-var currPlayer = 1; // active player: 1 or 2
-var board = []; // array of rows, each row is array of cells  (board[y][x])
+let currPlayer = 1; // active player: 1 or 2
+const board = []; // array of rows, each row is array of cells  (board[y][x])
 
 /** makeBoard: create in-JS board structure:
  *    board = array of rows, each row is array of cells  (board[y][x])
  */
-
+// TODO: set "board" to empty HEIGHT x WIDTH matrix array
 function makeBoard() {
-  // TODO: set "board" to empty HEIGHT x WIDTH matrix array
+  for (let i = 0; i < HEIGHT; i++){
+    board[i] = new Array(WIDTH);
+  }
 }
 
 /** makeHtmlBoard: make HTML table and row of column tops. */
 
 function makeHtmlBoard() {
   // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board"
-
+  const htmlBoard = document.getElementById("board");
   // TODO: add comment for this code
-  var top = document.createElement("tr");
+  // this is the top row (with dashed pitlined cells)
+  // the event listener is added to handle a click event
+  // "tr" is TableRow Object
+  const top = document.createElement("tr");
+  // each row has its corrwsponding "id"
   top.setAttribute("id", "column-top");
   top.addEventListener("click", handleClick);
-
-  for (var x = 0; x < WIDTH; x++) {
-    var headCell = document.createElement("td");
+  // this for loop adds the columns to the top row
+  // "td" is TableData Object
+  for (let x = 0; x < WIDTH; x++) {
+    let headCell = document.createElement("td");
+    // each clumn has its corresponding "id"
     headCell.setAttribute("id", x);
+    // this is where the cells of the columns get appended to the top row
     top.append(headCell);
   }
+  // this is where the top row gets appended tro the table 
   htmlBoard.append(top);
 
   // TODO: add comment for this code
-  for (var y = 0; y < HEIGHT; y++) {
+  // nested loop that creates the main table where that chips will go
+  // works like the loop above to create the rows but the outer loop iterates to create HEIGHT number of rows 
+  for (let y = 0; y < HEIGHT; y++) {
     const row = document.createElement("tr");
-    for (var x = 0; x < WIDTH; x++) {
+    for (let x = 0; x < WIDTH; x++) {
       const cell = document.createElement("td");
       cell.setAttribute("id", `${y}-${x}`);
       row.append(cell);
@@ -52,7 +64,12 @@ function makeHtmlBoard() {
 
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
-  return 0;
+  for(let i = HEIGHT-1; i > -1;i--){
+    if (!board[i][x]){
+      return i;
+    }
+  }
+  return null;
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
