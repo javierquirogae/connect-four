@@ -85,13 +85,14 @@ function placeInTable(y, x) {
 
 function endGame(msg) {
   // TODO: pop up alert message
+  window.alert(msg);
 }
 
 /** handleClick: handle click of column top to play piece */
 
 function handleClick(evt) {
   // get x from ID of clicked cell
-  var x = +evt.target.id;
+  let x = +evt.target.id;
 
   // get next spot in column (if none, ignore click)
   var y = findSpotForCol(x);
@@ -102,7 +103,8 @@ function handleClick(evt) {
   // place piece in board and add to HTML table
   // TODO: add line to update in-memory board
   placeInTable(y, x);
-
+  board[y][x] = 1;
+  console.log(...board[y]);
   // check for win
   if (checkForWin()) {
     return endGame(`Player ${currPlayer} won!`);
