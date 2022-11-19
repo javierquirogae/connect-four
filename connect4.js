@@ -78,6 +78,7 @@ function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
   let htmlCell = document.getElementById(`${y}-${x}`);
   let newDiv = document.createElement("div");
+  newDiv.setAttribute("class", `player_${currPlayer}_piece`);
   htmlCell.append(newDiv);
 }
 
@@ -103,11 +104,12 @@ function handleClick(evt) {
   // place piece in board and add to HTML table
   // TODO: add line to update in-memory board
   placeInTable(y, x);
-  board[y][x] = 1;
+  board[y][x] = currPlayer;
   console.log(...board[y]);
   // check for win
   if (checkForWin()) {
-    return endGame(`Player ${currPlayer} won!`);
+    if(currPlayer===1)return endGame("Red player won!");
+    else return endGame("Blue player won!");
   }
 
   // check for tie
@@ -115,6 +117,8 @@ function handleClick(evt) {
 
   // switch players
   // TODO: switch currPlayer 1 <-> 2
+  if(currPlayer===1) currPlayer = 2;
+  else currPlayer =1;
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
