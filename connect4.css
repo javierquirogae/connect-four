@@ -29,10 +29,21 @@
 }
 /* column-top is table row of clickable areas for each column */
 
-#column-top td {
+#column-top-1 td {
   border: dashed 1px lightgray;
 }
 
-#column-top td:hover {
-  background-color: gold;
+#column-top-1 td:hover {
+  background-color: red;
+ 
+  border-radius: 50%;
+}
+#column-top-2 td {
+  border: dashed 1px lightgray;
+}
+
+#column-top-2 td:hover {
+  background-color: blue;
+  
+  border-radius: 50%;
 }

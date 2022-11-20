@@ -4,11 +4,12 @@
  * column until a player gets four-in-a-row (horiz, vert, or diag) or until
  * board fills (tie)
  */
-
+const messageH2 = document.getElementById("Message");
 const WIDTH = 7;
 const HEIGHT = 6;
 
 let currPlayer = 1; // active player: 1 or 2
+messageH2.innerText = `Red's turn !`
 const board = []; // array of rows, each row is array of cells  (board[y][x])
 
 /** makeBoard: create in-JS board structure:
@@ -32,7 +33,7 @@ function makeHtmlBoard() {
   // "tr" is TableRow Object
   const top = document.createElement("tr");
   // each row has its corrwsponding "id"
-  top.setAttribute("id", "column-top");
+  top.setAttribute("id", `column-top-${currPlayer}`);
   top.addEventListener("click", handleClick);
   // this for loop adds the columns to the top row
   // "td" is TableData Object
@@ -86,12 +87,13 @@ function placeInTable(y, x) {
 
 function endGame(msg) {
   // TODO: pop up alert message
-  window.alert(msg);
+  //window.alert(msg);
 }
 
 /** handleClick: handle click of column top to play piece */
 
 function handleClick(evt) {
+  const columnTop = document.getElementById(`column-top-${currPlayer}`);
   // get x from ID of clicked cell
   let x = +evt.target.id;
 
@@ -108,8 +110,14 @@ function handleClick(evt) {
   console.log(...board[y]);
   // check for win
   if (checkForWin()) {
-    if(currPlayer===1)return endGame("Red player won!");
-    else return endGame("Blue player won!");
+    if(currPlayer===1){
+      messageH2.innerText = `Red won !`;
+      return endGame("Red player won !");
+    }
+    else {
+      messageH2.innerText = `Blue won !`;
+      return endGame("Blue player won!");
+    }
   }
 
   // check for tie
@@ -117,8 +125,15 @@ function handleClick(evt) {
 
   // switch players
   // TODO: switch currPlayer 1 <-> 2
-  if(currPlayer===1) currPlayer = 2;
-  else currPlayer =1;
+  if(currPlayer===1){
+    messageH2.innerText = `Blue's turn !`;
+    currPlayer = 2;
+  } 
+  else {
+    currPlayer =1;
+    messageH2.innerText = `Red's turn !`;
+  }
+  columnTop.setAttribute("id", `column-top-${currPlayer}`);
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
