@@ -87,6 +87,34 @@ function placeInTable(y, x) {
 
 function endGame(msg) {
   // TODO: pop up alert message
+  for(let i = 0; i < 8; i++){
+    for(let x = 0; x < 7; x++){
+      let y = findSpotForCol(x);
+      if(y===null) x++;
+      if(x>6) x = 0;
+      y = findSpotForCol(x);
+      if(y===null) x++;
+      if(x>6) x = 0;
+      y = findSpotForCol(x);
+      if(y===null) x++;
+      if(x>6) x = 0;
+      y = findSpotForCol(x);
+      if(x<7 && y){
+        board[y][x] = 300;
+        let htmlCell = document.getElementById(`${y}-${x}`);
+        let newDiv = document.createElement("div");
+        newDiv.setAttribute("class", "game_over");
+        htmlCell.append(newDiv);
+      }
+    }
+  }
+  for(let first_x = 0; first_x < 7; first_x++){
+    board[0][first_x] = 300;
+    let htmlCell = document.getElementById(`0-${first_x}`);
+    let newDiv = document.createElement("div");
+    newDiv.setAttribute("class", "game_over");
+    htmlCell.append(newDiv);
+  }
   //window.alert(msg);
 }
 
@@ -98,9 +126,9 @@ function handleClick(evt) {
   let x = +evt.target.id;
 
   // get next spot in column (if none, ignore click)
-  var y = findSpotForCol(x);
+  let y = findSpotForCol(x);
   if (y === null) {
-    return;
+    return y;
   }
 
   // place piece in board and add to HTML table
