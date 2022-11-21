@@ -92,7 +92,7 @@ function endGame(msg) {
     let coordinates = highlightArray[i];
     console.log(coordinates);
     let htmlCell = document.getElementById(`${coordinates[0]}-${coordinates[1]}`);
-    htmlCell.setAttribute("class", `winning_player_cell`);
+    htmlCell.setAttribute("class", `winning_cell`);
   }
 
 
