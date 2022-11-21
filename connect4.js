@@ -6,7 +6,7 @@
  */
 const messageH2 = document.getElementById("Message");
 const WIDTH = 7;
-const HEIGHT = 6;
+const HEIGHT = 6; 
 
 let currPlayer = 1; // active player: 1 or 2
 messageH2.innerText = `Red's turn !`
@@ -87,35 +87,29 @@ function placeInTable(y, x) {
 
 function endGame(msg) {
   // TODO: pop up alert message
-  for(let i = 0; i < 8; i++){
-    for(let x = 0; x < 7; x++){
-      let y = findSpotForCol(x);
-      if(y===null) x++;
-      if(x>6) x = 0;
-      y = findSpotForCol(x);
-      if(y===null) x++;
-      if(x>6) x = 0;
-      y = findSpotForCol(x);
-      if(y===null) x++;
-      if(x>6) x = 0;
-      y = findSpotForCol(x);
-      if(x<7 && y){
-        board[y][x] = 300;
+  const highlightArray = highlight();
+  for(let i = 0; i < 4; i++){
+    let coordinates = highlightArray[i];
+    console.log(coordinates);
+    let htmlCell = document.getElementById(`${coordinates[0]}-${coordinates[1]}`);
+    htmlCell.setAttribute("class", `winning_player_cell`);
+  }
+
+
+  for(let y = 0; y < HEIGHT; y++){
+    for(let x = 0; x < WIDTH; x++){
+      if(board[y][x] == null){
         let htmlCell = document.getElementById(`${y}-${x}`);
         let newDiv = document.createElement("div");
         newDiv.setAttribute("class", "game_over");
         htmlCell.append(newDiv);
+        board[y][x] = 300;
       }
     }
   }
-  for(let first_x = 0; first_x < 7; first_x++){
-    board[0][first_x] = 300;
-    let htmlCell = document.getElementById(`0-${first_x}`);
-    let newDiv = document.createElement("div");
-    newDiv.setAttribute("class", "game_over");
-    htmlCell.append(newDiv);
-  }
-  //window.alert(msg);
+
+  setTimeout(() => {window.alert(msg);}, 200);
+
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -139,18 +133,21 @@ function handleClick(evt) {
   // check for win
   if (checkForWin()) {
     if(currPlayer===1){
-      messageH2.innerText = `Red won !`;
-      return endGame("Red player won !");
+      messageH2.innerText = `Red won !  [refresh to reset]`;
+      return endGame("Red player won !  [refresh to reset]" );
     }
     else {
-      messageH2.innerText = `Blue won !`;
-      return endGame("Blue player won!");
+      messageH2.innerText = `Blue won !  [refresh to reset]`;
+      return endGame("Blue player won!  [refresh to reset]");
     }
   }
 
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
-
+  if (checkIfboardFilled()){
+      messageH2.innerText = `Tie !!  [refresh to reset]`;
+      return endGame("Tie !!  [refresh to reset]");
+  }
   // switch players
   // TODO: switch currPlayer 1 <-> 2
   if(currPlayer===1){
@@ -162,6 +159,17 @@ function handleClick(evt) {
     messageH2.innerText = `Red's turn !`;
   }
   columnTop.setAttribute("id", `column-top-${currPlayer}`);
+}
+
+function checkIfboardFilled() {
+  for(let y = 0; y < HEIGHT; y++){
+    for(let x = 0; x < WIDTH; x++){
+      if(board[y][x] == null){
+       return false;
+      }
+    }
+  }
+  return true;
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
@@ -184,12 +192,12 @@ function checkForWin() {
 
   // TODO: read and understand this code. Add comments to help you.
 
-  for (var y = 0; y < HEIGHT; y++) {
-    for (var x = 0; x < WIDTH; x++) {
-      var horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-      var vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
-      var diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
-      var diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
+  for (let y = 0; y < HEIGHT; y++) {
+    for (let x = 0; x < WIDTH; x++) {
+      const horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
+      const vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
+      const diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
+      const diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
 
       if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
         return true;
@@ -197,6 +205,47 @@ function checkForWin() {
     }
   }
 }
+
+
+function highlight(){
+  function _win(cells) {
+   
+    return cells.every(
+      ([y, x]) =>
+        y >= 0 &&
+        y < HEIGHT &&
+        x >= 0 &&
+        x < WIDTH &&
+        board[y][x] === currPlayer
+    );
+  }
+  for (let y = 0; y < HEIGHT; y++) {
+    for (let x = 0; x < WIDTH; x++) {
+      var horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
+      var vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
+      var diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
+      var diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
+      if (_win(horiz)){ 
+        console.log(horiz);
+        return horiz;
+      }
+      else if(_win(vert)){
+        console.log(vert);
+        return vert;
+      }
+      else if(_win(diagDR)){
+        console.log(diagDR);
+        return diagDR;
+      }
+      else if(_win(diagDL)){
+        console.log(diagDL);
+        return diagDL;
+      }
+    }
+   
+  }
+}
+
 
 makeBoard();
 makeHtmlBoard();
